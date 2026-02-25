@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flasgger import swag_from
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from services.project_service import (
 	create_new_project,
@@ -13,7 +14,13 @@ project_bp = Blueprint("projects", __name__)
 @project_bp.route("/projects", methods=["GET", "POST"])
 @jwt_required()
 def projects():
-	"""Get all user projects or create a new project"""
+	"""
+	Get all user projects or create a new project
+	---
+    responses:
+      200:
+        description: A list of projects
+	"""
 	user_id = get_jwt_identity()
     
 	if request.method == "POST":
@@ -40,7 +47,13 @@ def projects():
 @project_bp.route("/projects/<slug>", methods=["GET"])
 @jwt_required()
 def get_project(slug):
-	"""Get project details by slug"""
+	"""
+	Get project details by slug
+	---
+    responses:
+      200:
+        description: A project
+	"""
 	success, message, data = get_project_details(slug)
     
 	if not success:
@@ -52,7 +65,13 @@ def get_project(slug):
 @project_bp.route("/projects/<slug>/join", methods=["POST"])
 @jwt_required()
 def join_project(slug):
-	"""Join a project by slug"""
+	"""
+	Join a project by slug
+	---
+    responses:
+      200:
+        description: add a user to a project
+	"""
 	user_id = get_jwt_identity()
 	success, message, data = join_project_service(slug, user_id)
     
